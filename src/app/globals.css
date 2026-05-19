@@ -10,6 +10,11 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --color-splj-bordeaux: #2B0D1A;
+  --color-splj-bordeaux-medium: #5C1A2E;
+  --color-splj-or: #F5D87A;
+  --color-splj-or-light: #FDF6E3;
+  --color-splj-creme: #F9F5EE;
 }
 
 @media (prefers-color-scheme: dark) {
