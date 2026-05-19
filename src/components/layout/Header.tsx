@@ -15,8 +15,22 @@ export default function Header() {
         <div className="flex items-center gap-3 md:mx-auto my-5">
           {/* Croix SVG */}
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <rect x="10" y="0" width="4" height="24" fill="#F5D87A" />
-            <rect x="0" y="8" width="24" height="4" fill="#F5D87A" />
+            <rect
+              x="10"
+              y="0"
+              width="4"
+              height="24"
+              fill="currentColor"
+              className="text-splj-or"
+            />
+            <rect
+              x="0"
+              y="8"
+              width="24"
+              height="4"
+              fill="currentColor"
+              className="text-splj-or"
+            />
           </svg>
           <div className="flex flex-col">
             <span className="font-bold">SAINT PIERRE-LE-JEUNE</span>
@@ -75,9 +89,9 @@ export default function Header() {
             >
               <path
                 stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
                 d="m1 13 5.7-5.326a.909.909 0 0 0 0-1.348L1 1"
               />
             </svg>
@@ -96,9 +110,9 @@ export default function Header() {
             >
               <path
                 stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
                 d="m1 13 5.7-5.326a.909.909 0 0 0 0-1.348L1 1"
               />
             </svg>
@@ -117,9 +131,9 @@ export default function Header() {
             >
               <path
                 stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
                 d="m1 13 5.7-5.326a.909.909 0 0 0 0-1.348L1 1"
               />
             </svg>
@@ -138,9 +152,9 @@ export default function Header() {
             >
               <path
                 stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
                 d="m1 13 5.7-5.326a.909.909 0 0 0 0-1.348L1 1"
               />
             </svg>
@@ -159,9 +173,9 @@ export default function Header() {
             >
               <path
                 stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
                 d="m1 13 5.7-5.326a.909.909 0 0 0 0-1.348L1 1"
               />
             </svg>
@@ -180,9 +194,9 @@ export default function Header() {
             >
               <path
                 stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
                 d="m1 13 5.7-5.326a.909.909 0 0 0 0-1.348L1 1"
               />
             </svg>
