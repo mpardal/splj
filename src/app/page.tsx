@@ -1,11 +1,7 @@
-import Image from "next/image";
-
 export default function Home() {
   return (
-    <div>
-      <main>
-        <h1>Bienvenue</h1>
-      </main>
-    </div>
+    <>
+      <h1 className="bg-amber-500">Bienvenue</h1>
+    </>
   );
 }
