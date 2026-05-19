@@ -1,5 +1,6 @@
 "use client";
 
+import Logo from "@/components/ui/Logo";
 import { useState } from "react";
 import Link from "next/link";
 
@@ -12,33 +13,7 @@ export default function Header() {
         className="flex flex-row justify-between items-center md:flex-col gap-1 bg-splj-bordeaux-medium
     text-splj-creme px-3 md:pl-0"
       >
-        <div className="flex items-center gap-3 md:mx-auto my-5">
-          {/* Croix SVG */}
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <rect
-              x="10"
-              y="0"
-              width="4"
-              height="24"
-              fill="currentColor"
-              className="text-splj-or"
-            />
-            <rect
-              x="0"
-              y="8"
-              width="24"
-              height="4"
-              fill="currentColor"
-              className="text-splj-or"
-            />
-          </svg>
-          <div className="flex flex-col">
-            <span className="font-bold">SAINT PIERRE-LE-JEUNE</span>
-            <span className="font-extralight text-sm text-splj-or/70">
-              STRASBOURG
-            </span>
-          </div>
-        </div>
+        <Logo isFooter={false} />
         <hr className="hidden md:block text-splj-creme/10 w-[70%] mx-auto" />
         <nav className="hidden md:flex flex-row gap-3 tracking-widest text-xs my-3 mx-auto pb-3">
           <Link href="/" className="hover:text-splj-or">
