@@ -1,3 +1,5 @@
+import PageHero from "@/components/ui/PageHero";
+
 export const metadata = {
   title: "Baptême des enfants — Saint Pierre-Le-Jeune",
   description:
@@ -6,10 +8,15 @@ export const metadata = {
 
 export default function BaptemeEnfants() {
   return (
-    <div>
-      <main>
-        <h1>Bapteme enfants</h1>
-      </main>
-    </div>
+    <>
+      <PageHero
+        title="Le baptême pour les enfants"
+        description="Vous désirez faire baptiser votre enfant en l'église du Sacré Coeur de la paroisse Saint-Pierre-le-Jeune de Strasbourg ?"
+        subDescription="Merci de nous contacter au"
+        telephone="06 63 91 15 19"
+        backLink="/sacrements"
+        backLabel=" Les sacrements"
+      />
+    </>
   );
 }
