@@ -8,6 +8,7 @@ import { navigation, standaloneLinks, type NavSection } from "@/lib/navigation";
 function DesktopDropdown({ section }: { section: NavSection }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const firstHref = section.items[0]?.href ?? "#";
 
   useEffect(() => {
@@ -17,15 +18,27 @@ function DesktopDropdown({ section }: { section: NavSection }) {
       }
     }
     document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+      if (closeTimer.current) clearTimeout(closeTimer.current);
+    };
   }, []);
+
+  const handleMouseEnter = () => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    setOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    closeTimer.current = setTimeout(() => setOpen(false), 150);
+  };
 
   return (
     <div
       ref={ref}
       className="relative"
-      onMouseEnter={() => setOpen(true)}
-      onMouseLeave={() => setOpen(false)}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <Link
         href={firstHref}

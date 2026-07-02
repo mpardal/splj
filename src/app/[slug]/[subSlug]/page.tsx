@@ -50,7 +50,19 @@ export default async function SectionSubPage({
 
       {page.content && (
         <div className="prose prose-slate max-w-none">
-          <PortableText value={page.content} />
+            <PortableText
+                value={page.content}
+                components={{
+                    types: {
+                        callout: ({ value }) => (
+                            <div className="border-l-4 border-gray-400 pl-4 my-4">
+                                {value.title && <p className="font-bold mb-2">{value.title}</p>}
+                                <PortableText value={value.body} />
+                            </div>
+                        ),
+                    },
+                }}
+            />
         </div>
       )}
     </article>

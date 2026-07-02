@@ -60,6 +60,7 @@ export const pageType = defineType({
             }),
           ],
         },
+        { type: 'callout' }
       ],
     }),
     defineField({
