@@ -1,7 +1,9 @@
 import { client } from "@/sanity/lib/client";
 import { PAGE_BY_SECTION_AND_SLUG_QUERY } from "@/sanity/queries";
+import { urlFor } from "@/sanity/lib/image";
 import { PortableText } from "next-sanity";
 import { notFound } from "next/navigation";
+import Image from "next/image";
 import Link from "next/link";
 
 export default async function SectionSubPage({
@@ -43,6 +45,18 @@ export default async function SectionSubPage({
       </Link>
 
       <h1 className="text-3xl font-bold text-splj-bordeaux mb-4">{page.title}</h1>
+
+      {page.image && (
+        <div className="relative w-full h-64 md:h-80 mb-8 rounded-lg overflow-hidden">
+          <Image
+            src={urlFor(page.image).width(900).height(400).fit("crop").url()}
+            alt={page.title}
+            fill
+            className="object-cover"
+            priority
+          />
+        </div>
+      )}
 
       {page.excerpt && (
         <p className="text-lg text-splj-bordeaux-medium/80 mb-8">{page.excerpt}</p>
