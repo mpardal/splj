@@ -1,34 +1,19 @@
 import Link from "next/link";
+import { client } from "@/sanity/lib/client";
+import { MESSES_QUERY, ACTUALITES_HOMEPAGE_QUERY } from "@/sanity/queries";
+import ActualitesCarousel from "@/components/ui/ActualitesCarousel";
 
-const messes = [
-  { jour: "Dimanche", heure: "9h00", label: "Messe dominicale" },
-  { jour: "Dimanche", heure: "11h00", label: "Messe chantée" },
-  { jour: "Mercredi", heure: "18h30", label: "Messe en semaine" },
-  { jour: "Vendredi", heure: "12h15", label: "Messe de midi" },
-];
+type Messe = { _id: string; jour: string; heure: string; label: string; note?: string | null };
+type Actualite = { _id: string; titre: string; slug: string; categorie: string; date: string; resume: string };
 
-const actualites = [
-  {
-    categorie: "Vie paroissiale",
-    titre: "Pèlerinage de printemps à Lourdes",
-    description:
-      "Rejoignez-nous pour ce temps de ressourcement et de prière communautaire.",
-    date: "12 juin 2025",
-  },
-  {
-    categorie: "Sacrements",
-    titre: "Préparation aux premières communions",
-    description:
-      "Les inscriptions pour l'année catéchétique 2025–2026 sont ouvertes.",
-    date: "3 juin 2025",
-  },
-  {
-    categorie: "Communauté",
-    titre: "Repas paroissial après la messe du dimanche",
-    description:
-      "Un moment de convivialité ouvert à toutes et tous, après la messe de 11h.",
-    date: "25 mai 2025",
-  },
+const MESSES_FALLBACK: Messe[] = [
+  { _id: "1", jour: "Mardi", heure: "18h30", label: "Messe du soir", note: null },
+  { _id: "2", jour: "Mercredi", heure: "18h30", label: "Messe du soir", note: null },
+  { _id: "3", jour: "Jeudi", heure: "18h30", label: "Messe du soir", note: null },
+  { _id: "4", jour: "Vendredi", heure: "18h30", label: "Messe du soir", note: null },
+  { _id: "5", jour: "Samedi", heure: "18h00", label: "Messe du soir", note: null },
+  { _id: "6", jour: "Dimanche", heure: "10h30", label: "Messe dominicale", note: null },
+  { _id: "7", jour: "Dimanche", heure: "18h00", label: "Messe du soir", note: null },
 ];
 
 const sacrements = [
@@ -114,7 +99,13 @@ function IconCalendar() {
   );
 }
 
-export default function Home() {
+export default async function Home() {
+  const [messesFromSanity, actualites]: [Messe[], Actualite[]] = await Promise.all([
+    client.fetch(MESSES_QUERY, {}, { next: { revalidate: 300 } }),
+    client.fetch(ACTUALITES_HOMEPAGE_QUERY, {}, { next: { revalidate: 300 } }),
+  ]);
+  const messes: Messe[] = messesFromSanity?.length ? messesFromSanity : MESSES_FALLBACK;
+
   return (
     <>
       {/* ── Hero ── */}
@@ -175,43 +166,32 @@ export default function Home() {
 
       {/* ── Messes de la semaine ── */}
       <section className="bg-white border-b border-splj-bordeaux/8">
-        <div className="max-w-5xl mx-auto px-6 py-6">
-          {/* Desktop */}
-          <div className="hidden md:flex items-center gap-8">
-            <div className="flex items-center gap-2 text-splj-bordeaux font-semibold shrink-0">
-              <IconClock />
-              <span>Messes de la semaine</span>
-            </div>
-            <div className="flex items-center gap-6 flex-wrap flex-1">
-              {messes.map((m, i) => (
-                <div key={i} className="flex flex-col gap-0.5">
-                  <div className="flex items-center gap-2">
-                    <span className="font-semibold text-splj-bordeaux text-sm">{m.jour}</span>
-                    <span className="bg-splj-or text-splj-bordeaux text-xs font-bold px-2 py-0.5 rounded-sm">
-                      {m.heure}
-                    </span>
-                  </div>
-                  <span className="text-xs text-splj-bordeaux/60">{m.label}</span>
-                </div>
-              ))}
-            </div>
+        <div className="max-w-5xl mx-auto px-6 py-8">
+          <div className="flex items-center gap-2 text-splj-bordeaux mb-6">
+            <IconClock />
+            <h2 className="text-xs font-bold uppercase tracking-widest">Messes de la semaine</h2>
           </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3">
+            {messes.map((m) => (
+              <div
+                key={m._id}
+                className="relative flex flex-col gap-2 border border-splj-bordeaux/10 bg-splj-creme p-4 overflow-hidden group"
+              >
+                {/* Gold top accent bar */}
+                <span className="absolute top-0 left-0 right-0 h-0.5 bg-splj-or" />
 
-          {/* Mobile */}
-          <div className="md:hidden">
-            <div className="flex items-center gap-2 text-splj-bordeaux font-semibold uppercase tracking-widest text-xs mb-4">
-              <IconClock />
-              <span>Messes de la semaine</span>
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              {messes.map((m, i) => (
-                <div key={i} className="border border-splj-bordeaux/10 p-3 rounded">
-                  <p className="text-xs font-bold uppercase tracking-wide text-splj-bordeaux/60">{m.jour}</p>
-                  <p className="text-2xl font-bold text-splj-bordeaux">{m.heure}</p>
-                  <p className="text-xs text-splj-bordeaux/70 mt-0.5">{m.label}</p>
-                </div>
-              ))}
-            </div>
+                <p className="text-xs font-bold uppercase tracking-widest text-splj-bordeaux/50 mt-1">
+                  {m.jour}
+                </p>
+                <p className="text-2xl font-bold text-splj-bordeaux leading-none">
+                  {m.heure}
+                </p>
+                <p className="text-xs text-splj-bordeaux/60 leading-snug">{m.label}</p>
+                {m.note && (
+                  <p className="text-xs text-splj-bordeaux/40 italic leading-snug">{m.note}</p>
+                )}
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -232,24 +212,11 @@ export default function Home() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {actualites.map((a, i) => (
-              <article
-                key={i}
-                className="bg-white border border-splj-bordeaux/10 p-5 flex flex-col gap-3"
-              >
-                <p className="text-xs font-bold uppercase tracking-widest text-splj-bordeaux/50">
-                  {a.categorie}
-                </p>
-                <h3 className="font-bold text-splj-bordeaux text-lg leading-snug">{a.titre}</h3>
-                <p className="text-sm text-splj-bordeaux/70 flex-1">{a.description}</p>
-                <div className="flex items-center gap-1.5 text-xs text-splj-bordeaux/50">
-                  <IconCalendar />
-                  <span>{a.date}</span>
-                </div>
-              </article>
-            ))}
-          </div>
+          {actualites.length === 0 ? (
+            <p className="text-sm text-splj-bordeaux/50 italic">Aucune actualité pour le moment.</p>
+          ) : (
+            <ActualitesCarousel items={actualites} />
+          )}
         </div>
       </section>
 
@@ -288,14 +255,14 @@ export default function Home() {
                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                 <circle cx="12" cy="10" r="3" />
               </svg>
-              <span>1 place Saint-Pierre-Le-Jeune, Strasbourg</span>
+              <span>7, rue Saint Léon, 67000 Strasbourg</span>
             </div>
             <div className="flex items-center gap-3 text-sm text-splj-bordeaux/80">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" className="w-4 h-4 shrink-0 text-splj-bordeaux/50">
                 <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.28h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.86a16 16 0 0 0 6.13 6.13l.86-.86a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
               </svg>
-              <a href="tel:+33388324250" className="hover:text-splj-bordeaux transition-colors">
-                03 88 32 42 50
+              <a href="tel:+33388324319" className="hover:text-splj-bordeaux transition-colors">
+                03 88 32 43 19
               </a>
             </div>
             <div className="flex items-center gap-3 text-sm text-splj-bordeaux/80">

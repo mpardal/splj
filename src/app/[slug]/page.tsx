@@ -7,15 +7,23 @@ import { urlFor } from "@/sanity/lib/image";
 import { PortableText } from "next-sanity";
 import { redirect, notFound } from "next/navigation";
 import Image from "next/image";
+import type { Metadata } from "next";
 
-export default async function SlugPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+type Props = { params: Promise<{ slug: string }> };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const page = await client.fetch(PAGE_BY_SLUG_QUERY, { slug });
+  if (!page) return {};
+  return {
+    title: `${page.title} — Paroisse Saint Pierre-Le-Jeune`,
+    description: page.excerpt ?? undefined,
+  };
+}
+
+export default async function SlugPage({ params }: Props) {
   const { slug } = await params;
 
-  // Check if this slug is a section — if so, redirect to its first page
   const firstPage = await client.fetch(
     FIRST_PAGE_OF_SECTION_QUERY,
     { section: slug },
@@ -27,7 +35,6 @@ export default async function SlugPage({
     redirect(`/${slug}/${firstPage.slug.current}`);
   }
 
-  // Otherwise fetch as a top-level page
   const page = await client.fetch(
     PAGE_BY_SLUG_QUERY,
     { slug },
@@ -37,42 +44,57 @@ export default async function SlugPage({
   if (!page) return notFound();
 
   return (
-    <article className="max-w-3xl mx-auto px-6 py-10">
-      <h1 className="text-3xl font-bold text-splj-bordeaux mb-4">{page.title}</h1>
-
-      {page.image && (
-        <div className="relative w-full h-64 md:h-80 mb-8 rounded-lg overflow-hidden">
-          <Image
-            src={urlFor(page.image).width(900).height(400).fit("crop").url()}
-            alt={page.title}
-            fill
-            className="object-cover"
-            priority
-          />
+    <>
+      {/* Hero */}
+      <section className="relative bg-splj-bordeaux text-splj-creme overflow-hidden">
+        <div className="absolute right-0 top-0 opacity-10 pointer-events-none select-none" aria-hidden>
+          <svg width="200" height="260" viewBox="0 0 260 340" fill="currentColor">
+            <rect x="110" y="0" width="40" height="340" />
+            <rect x="0" y="110" width="260" height="40" />
+          </svg>
         </div>
-      )}
+        <div className="relative z-10 max-w-5xl mx-auto px-6 py-14 md:py-20">
+          <h1 className="text-3xl md:text-4xl font-bold leading-tight">{page.title}</h1>
+          {page.excerpt && (
+            <p className="text-splj-creme/70 mt-3 text-base max-w-2xl">{page.excerpt}</p>
+          )}
+        </div>
+      </section>
 
-      {page.excerpt && (
-        <p className="text-lg text-splj-bordeaux-medium/80 mb-8">{page.excerpt}</p>
-      )}
-
-      {page.content && (
-        <div className="prose prose-slate max-w-none">
-          <PortableText
+      {/* Contenu */}
+      <article className="max-w-3xl mx-auto px-6 py-12">
+        {page.content && (
+          <div className="prose max-w-none prose-headings:text-splj-bordeaux prose-headings:font-bold prose-p:text-splj-bordeaux/80 prose-a:text-splj-bordeaux prose-a:underline prose-strong:text-splj-bordeaux prose-li:text-splj-bordeaux/80">
+            <PortableText
               value={page.content}
               components={{
                 types: {
-                  callout: ({ value }) => (
-                      <div className="border-l-4 border-gray-400 pl-4 my-4">
-                        {value.title && <p className="font-bold mb-2">{value.title}</p>}
-                        <PortableText value={value.body} />
-                      </div>
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  callout: ({ value }: { value: any }) => (
+                    <div className="border-l-4 border-splj-or bg-splj-or-light pl-4 pr-4 py-3 my-6">
+                      {value.title && (
+                        <p className="font-bold text-splj-bordeaux mb-2">{value.title}</p>
+                      )}
+                      <PortableText value={value.body} />
+                    </div>
                   ),
                 },
               }}
+            />
+          </div>
+        )}
+
+        {page.image && (
+          <Image
+            src={urlFor(page.image).width(900).url()}
+            alt={page.title}
+            width={900}
+            height={600}
+            className="w-full h-auto mt-10"
+            priority
           />
-        </div>
-      )}
-    </article>
+        )}
+      </article>
+    </>
   );
 }
