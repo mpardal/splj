@@ -8,6 +8,7 @@ export default function Footer() {
       {/* Desktop */}
       <div className="hidden md:flex items-center justify-between px-8 py-4 text-sm text-splj-creme/70">
         <span>© 2025 Paroisse Saint Pierre-Le-Jeune, Strasbourg</span>
+        <RadioMariaPlayer />
         <nav className="flex gap-6">
           <Link href="/mentions-legales" className="hover:text-splj-or transition-colors">
             Mentions légales
@@ -15,7 +16,6 @@ export default function Footer() {
           <Link href="/contact" className="hover:text-splj-or transition-colors">
             Contact
           </Link>
-          <RadioMariaPlayer />
           <Link href="/information-acces" className="hover:text-splj-or transition-colors">
             Plan d&apos;accès
           </Link>
@@ -25,6 +25,7 @@ export default function Footer() {
       {/* Mobile */}
       <div className="md:hidden flex flex-col items-center py-6 px-4 gap-4">
         <Logo isFooter={true} />
+        <RadioMariaPlayer />
         <nav className="flex gap-4 text-sm text-splj-creme/70 flex-wrap justify-center">
           <Link href="/mentions-legales" className="hover:text-splj-or transition-colors">
             Mentions légales
