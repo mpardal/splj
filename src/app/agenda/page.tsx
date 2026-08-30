@@ -178,7 +178,7 @@ export default async function AgendaPage() {
                                   className="inline-flex items-center gap-1.5 text-xs font-semibold text-splj-bordeaux uppercase tracking-widest hover:text-splj-bordeaux/70 transition-colors"
                                 >
                                   <IconExternal />
-                                  S'inscrire
+                                  S&apos;inscrire
                                 </a>
                               )}
                               {e.description && (

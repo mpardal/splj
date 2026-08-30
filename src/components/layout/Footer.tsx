@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Logo from "@/components/ui/Logo";
+import {RadioMariaPlayer} from "@/components/ui/RadioMariaPlayer";
 
 export default function Footer() {
   return (
@@ -14,6 +15,7 @@ export default function Footer() {
           <Link href="/contact" className="hover:text-splj-or transition-colors">
             Contact
           </Link>
+          <RadioMariaPlayer />
           <Link href="/information-acces" className="hover:text-splj-or transition-colors">
             Plan d&apos;accès
           </Link>

@@ -1,8 +1,5 @@
 import { Resend } from "resend";
-import { z } from "zod";
 import { ContactSchema } from "@/lib/validations/contact";
-
-const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: Request) {
   try {
@@ -22,14 +19,16 @@ export async function POST(request: Request) {
     }
 
     // 4. Envoyer l'email avec Resend
+    const apiKey = process.env.RESEND_API_KEY;
     const to = process.env.RESEND_TO;
-    if (!to) {
+    if (!apiKey || !to) {
       return Response.json(
         { error: "Configuration manquante" },
         { status: 500 },
       );
     }
 
+    const resend = new Resend(apiKey);
     const data = await resend.emails.send({
       from: "onboarding@resend.dev",
       to: to,
